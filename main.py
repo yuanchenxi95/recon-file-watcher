@@ -9,6 +9,7 @@ if __name__ == '__main__':
     for dirname, dirnames, filenames in os.walk('/home/traffic/unctrl'):
         # print path to all subdirectories first.
         mac_or_ip_addresses.append(dirname)
+        print(filenames)
 
     print(mac_or_ip_addresses)
 
