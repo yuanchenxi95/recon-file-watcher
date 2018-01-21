@@ -10,5 +10,5 @@ if __name__ == '__main__':
         # print path to all subdirectories first.
         mac_or_ip_addresses.append(dirname)
 
-    print(len(mac_or_ip_addresses))
+    print(mac_or_ip_addresses)
 
