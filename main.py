@@ -23,4 +23,4 @@ if __name__ == '__main__':
             ip_processed_data_dict[log_file] = process_http_log(folder + '/' + log_file)
     print(ip_processed_data_dict)
     with open('http.log', 'w') as f:
-        f.write(ip_processed_data_dict)
+        f.write(str(ip_processed_data_dict))
