@@ -19,7 +19,7 @@ if __name__ == '__main__':
 
     ip_processed_data_dict = dict()
     for folder in mac_log_dict:
-        for log_file in folder:
+        for log_file in mac_log_dict[folder]:
             print(log_file)
             # ip_processed_data_dict[log_file] = process_http_log(log_file)
     # print(ip_processed_data_dict)
