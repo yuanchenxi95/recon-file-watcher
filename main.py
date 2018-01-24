@@ -1,7 +1,6 @@
 from pcap_process import process_pcap
 from http_log_process import process_http_log
 import os
-import requests
 import json
 
 if __name__ == '__main__':
@@ -23,8 +22,5 @@ if __name__ == '__main__':
             # print(folder)
             ip_processed_data_dict[log_file] = process_http_log(folder + '/' + log_file)
     print(ip_processed_data_dict)
-    r = requests.post("https://api.myjson.com/bins", ip_processed_data_dict)
-    print(r.status_code)
-    print(r.headers)
-    print(r.content)
-
+    with open('http.log', 'w') as f:
+        f.write(ip_processed_data_dict)
