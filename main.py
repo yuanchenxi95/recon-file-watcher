@@ -24,6 +24,6 @@ if __name__ == '__main__':
             ip_processed_data_dict[folder] = process_http_log(folder + '/' + log_file)
     # requests.post('http://54.193.126.147:3000/', ip_processed_data_dict)
 
-    print(ip_processed_data_dict)
-    # with open('http.json', 'w') as f:
-    #     f.write(str(ip_processed_data_dict))
+    # print(ip_processed_data_dict)
+    with open('http.json', 'w') as f:
+        f.write(str(ip_processed_data_dict))
