@@ -23,5 +23,8 @@ if __name__ == '__main__':
             # print(folder)
             ip_processed_data_dict[log_file] = process_http_log(folder + '/' + log_file)
     print(ip_processed_data_dict)
-    # r = requests.post("https://api.myjson.com/bins", )
+    r = requests.post("https://api.myjson.com/bins", ip_processed_data_dict)
+    print(r.status_code)
+    print(r.headers)
+    print(r.content)
 
