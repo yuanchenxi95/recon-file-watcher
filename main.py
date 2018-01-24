@@ -2,6 +2,7 @@ from pcap_process import process_pcap
 from http_log_process import process_http_log
 import os
 import json
+import requests
 
 if __name__ == '__main__':
     # pcap_list = process_pcap('/Users/ChenxiYuan/Project/ReconFileWatcher/2017-12-08_19.00.02_192.168.10.131.pcap')
@@ -19,8 +20,9 @@ if __name__ == '__main__':
     ip_processed_data_dict = dict()
     for folder in mac_log_dict:
         for log_file in mac_log_dict[folder]:
-            print(folder + '/' + log_file)
-            # ip_processed_data_dict[log_file] = process_http_log(folder + '/' + log_file)
+            # print(folder + '/' + log_file)
+            ip_processed_data_dict[folder] = process_http_log(folder + '/' + log_file)
+    requests.post('http://54.193.126.147:3000/', ip_processed_data_dict)
     # print(ip_processed_data_dict)
     # with open('http.json', 'w') as f:
     #     f.write(str(ip_processed_data_dict))
