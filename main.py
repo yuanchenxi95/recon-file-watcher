@@ -22,5 +22,5 @@ if __name__ == '__main__':
             # print(folder)
             ip_processed_data_dict[log_file] = process_http_log(folder + '/' + log_file)
     print(ip_processed_data_dict)
-    with open('http.log', 'w') as f:
+    with open('http.json', 'w') as f:
         f.write(str(ip_processed_data_dict))
