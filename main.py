@@ -22,8 +22,8 @@ def process_latest_pcap(ctl_name):
         for file in file_names:
             if file.endswith('.pcap'):
                 files_with_pcap_extension.append(file)
-
-        mac_log_dict[dir_name] = find_the_latest_pcap_file(files_with_pcap_extension)
+        if len(files_with_pcap_extension) > 0:
+            mac_log_dict[dir_name] = find_the_latest_pcap_file(files_with_pcap_extension)
 
 
 if __name__ == '__main__':
