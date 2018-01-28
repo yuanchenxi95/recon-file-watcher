@@ -9,9 +9,10 @@ import datetime
 def convert_date_string_to_time_stamp(date_string):
     return time.mktime(datetime.datetime.strptime(date_string, "%Y-%m-%d").timetuple())
 
+
 def find_the_latest_pcap_file(pcaps_list):
     return max(pcaps_list,
-               lambda pcap_name: convert_date_string_to_time_stamp(pcap_name[:10]))
+               key=lambda pcap_name: convert_date_string_to_time_stamp(pcap_name[:10]))
 
 
 def process_latest_pcap(ctl_name):
