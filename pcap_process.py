@@ -46,7 +46,10 @@ def inet_to_str(inet):
     except ValueError:
         return socket.inet_ntop(socket.AF_INET6, inet)
 
-def process_http_requests(pcap):
+
+def process_http_requests(f):
+    pcap = dpkt.pcap.Reader(f)
+
     """Print out information about each packet in a pcap
        Args:
            pcap: dpkt pcap reader object (dpkt.pcap.Reader)
@@ -97,5 +100,8 @@ def process_pcap(file_path):
     """Open up a test pcap file and print out the packets"""
     with open(file_path, 'rb') as f:
         print(file_path)
-        pcap = dpkt.pcap.Reader(f)
-        return process_http_requests(pcap)
+        try:
+            return_list = process_http_requests(file_path)
+        except:
+            return_list = []
+        return return_list
