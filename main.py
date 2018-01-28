@@ -26,7 +26,7 @@ def process_latest_pcap(ctl_name):
 
 
 if __name__ == '__main__':
-
+    process_http_log('/home/traffic/unctrl')
     # ip_processed_data_dict = dict()
     # for folder in mac_log_dict:
     #     for log_file in mac_log_dict[folder]:
