@@ -28,7 +28,8 @@ def process_latest_pcap(ctl_name):
 
 
 if __name__ == '__main__':
-    print(process_latest_pcap('/home/traffic/unctrl'))
+    mac_log_dict = process_latest_pcap('/home/traffic/unctrl')
+    print(json.dump(mac_log_dict))
     # ip_processed_data_dict = dict()
     # for folder in mac_log_dict:
     #     for log_file in mac_log_dict[folder]:
