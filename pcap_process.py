@@ -5,7 +5,7 @@ from dpkt.compat import compat_ord
 import json
 
 
-def generate_pcap_dict(eth_src_mac, eth_dst_mac, src_ip, dst_ip, header_host, http_method, time_stamp):
+def generate_pcap_dict(eth_src_mac, eth_dst_mac, src_ip, dst_ip, header_host, http_method, time_stamp, id):
     pcap_dict = dict()
     pcap_dict["eth_src_mac"] = eth_src_mac
     pcap_dict["eth_dst_mac"] = eth_dst_mac
@@ -14,6 +14,7 @@ def generate_pcap_dict(eth_src_mac, eth_dst_mac, src_ip, dst_ip, header_host, ht
     pcap_dict["header_host"] = header_host
     pcap_dict["http_method"] = http_method
     pcap_dict["time_stamp"] = time_stamp
+    pcap_dict["id"] = id
     return pcap_dict
 
 
@@ -79,13 +80,14 @@ def process_http_requests(f):
             fragment_offset = ip.off & dpkt.ip.IP_OFFMASK
 
             pcap_data_object = generate_pcap_dict(eth_src_mac=mac_addr(eth.src),
-                                             eth_dst_mac=mac_addr(eth.dst),
-                                             src_ip=inet_to_str(ip.src),
-                                             dst_ip=inet_to_str(ip.dst),
-                                             header_host=request.headers['host'],
-                                             http_method=request.method,
-                                             time_stamp=timestamp
-                                             )
+                                                  eth_dst_mac=mac_addr(eth.dst),
+                                                  src_ip=inet_to_str(ip.src),
+                                                  dst_ip=inet_to_str(ip.dst),
+                                                  header_host=request.headers['host'],
+                                                  http_method=request.method,
+                                                  time_stamp=timestamp,
+                                                  id=timestamp
+                                                  )
             pcap_data_list.append(pcap_data_object)
     return pcap_data_list
 
