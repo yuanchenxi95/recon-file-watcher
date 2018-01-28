@@ -6,13 +6,13 @@ import requests
 import time
 import datetime
 
-def convert_date_string_to_time_stamp(date_string):
-    return time.mktime(datetime.datetime.strptime(date_string, "%Y-%m-%d").timetuple())
+def convert_date_string_to_time_stamp(pcap_name):
+    return time.mktime(datetime.datetime.strptime(pcap_name[:10], "%Y-%m-%d").timetuple())
 
 
 def find_the_latest_pcap_file(pcaps_list):
     return max(pcaps_list,
-               key=lambda pcap_name: convert_date_string_to_time_stamp(pcap_name[:10]))
+               key=convert_date_string_to_time_stamp)
 
 
 def process_latest_pcap(ctl_name):
