@@ -32,7 +32,7 @@ if __name__ == '__main__':
     mac_http_dict = dict()
     for dir_name, filename in mac_log.items():
         k = dir_name + '/' + filename
-        mac_http_dict = process_pcap(dir_name + '/' + filename)
+        mac_http_dict[k] = process_pcap(k)
     print(mac_http_dict)
     # ip_processed_data_dict = dict()
     # for folder in mac_log_dict:
