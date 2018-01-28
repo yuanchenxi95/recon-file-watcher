@@ -100,5 +100,6 @@ def process_http_requests(pcap):
 def process_pcap(file_path):
     """Open up a test pcap file and print out the packets"""
     with open(file_path, 'rb') as f:
+        print(file_path)
         pcap = dpkt.pcap.Reader(f)
         return process_http_requests(pcap)
