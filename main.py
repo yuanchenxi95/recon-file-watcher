@@ -24,10 +24,11 @@ def process_latest_pcap(ctl_name):
                 files_with_pcap_extension.append(file)
         if len(files_with_pcap_extension) > 0:
             mac_log_dict[dir_name] = find_the_latest_pcap_file(files_with_pcap_extension)
+    return mac_log_dict
 
 
 if __name__ == '__main__':
-    process_latest_pcap('/home/traffic/unctrl')
+    print(process_latest_pcap('/home/traffic/unctrl'))
     # ip_processed_data_dict = dict()
     # for folder in mac_log_dict:
     #     for log_file in mac_log_dict[folder]:
