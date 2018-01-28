@@ -54,46 +54,42 @@ def process_http_requests(pcap):
     # For each packet in the pcap process the contents
     pcap_data_list = []
     for timestamp, buf in pcap:
+        # Unpack the Ethernet frame (mac src/dst, ethertype)
+        eth = dpkt.ethernet.Ethernet(buf)
 
-        try:
-            # Unpack the Ethernet frame (mac src/dst, ethertype)
-            eth = dpkt.ethernet.Ethernet(buf)
+        # Make sure the Ethernet data contains an IP packet
+        if not isinstance(eth.data, dpkt.ip.IP):
+            continue
 
-            # Make sure the Ethernet data contains an IP packet
-            if not isinstance(eth.data, dpkt.ip.IP):
+        # Now grab the data within the Ethernet frame (the IP packet)
+        ip = eth.data
+
+        # Check for TCP in the transport layer
+        if isinstance(ip.data, dpkt.tcp.TCP):
+
+            # Set the TCP data
+            tcp = ip.data
+
+            # Now see if we can parse the contents as a HTTP request
+            try:
+                request = dpkt.http.Request(tcp.data)
+            except (dpkt.dpkt.NeedData, dpkt.dpkt.UnpackError):
                 continue
 
-            # Now grab the data within the Ethernet frame (the IP packet)
-            ip = eth.data
+            # Pull out fragment information (flags and offset all packed into off field, so use bitmasks)
+            do_not_fragment = bool(ip.off & dpkt.ip.IP_DF)
+            more_fragments = bool(ip.off & dpkt.ip.IP_MF)
+            fragment_offset = ip.off & dpkt.ip.IP_OFFMASK
 
-            # Check for TCP in the transport layer
-            if isinstance(ip.data, dpkt.tcp.TCP):
-
-                # Set the TCP data
-                tcp = ip.data
-
-                # Now see if we can parse the contents as a HTTP request
-                try:
-                    request = dpkt.http.Request(tcp.data)
-                except (dpkt.dpkt.NeedData, dpkt.dpkt.UnpackError):
-                    continue
-
-                # Pull out fragment information (flags and offset all packed into off field, so use bitmasks)
-                do_not_fragment = bool(ip.off & dpkt.ip.IP_DF)
-                more_fragments = bool(ip.off & dpkt.ip.IP_MF)
-                fragment_offset = ip.off & dpkt.ip.IP_OFFMASK
-
-                pcap_data_object = PcapDataClass(eth_src_mac=mac_addr(eth.src),
-                                                 eth_dst_mac=mac_addr(eth.dst),
-                                                 src_ip=inet_to_str(ip.src),
-                                                 dst_ip=inet_to_str(ip.dst),
-                                                 header_host=request.headers['host'],
-                                                 http_method=request.method,
-                                                 time_stamp=timestamp
-                                                 )
-                pcap_data_list.append(pcap_data_object)
-        except:
-            continue
+            pcap_data_object = PcapDataClass(eth_src_mac=mac_addr(eth.src),
+                                             eth_dst_mac=mac_addr(eth.dst),
+                                             src_ip=inet_to_str(ip.src),
+                                             dst_ip=inet_to_str(ip.dst),
+                                             header_host=request.headers['host'],
+                                             http_method=request.method,
+                                             time_stamp=timestamp
+                                             )
+            pcap_data_list.append(pcap_data_object)
     return pcap_data_list
 
 
