@@ -13,6 +13,7 @@ def find_the_latest_pcap_file(pcaps_list):
     return max(pcaps_list,
                lambda pcap_name: convert_date_string_to_time_stamp(pcap_name[:10]))
 
+
 def process_latest_pcap(ctl_name):
     mac_log_dict = dict()
     for dir_name, dir_names, file_names in os.walk(ctl_name):
@@ -26,7 +27,7 @@ def process_latest_pcap(ctl_name):
 
 
 if __name__ == '__main__':
-    process_http_log('/home/traffic/unctrl')
+    process_latest_pcap('/home/traffic/unctrl')
     # ip_processed_data_dict = dict()
     # for folder in mac_log_dict:
     #     for log_file in mac_log_dict[folder]:
