@@ -29,13 +29,16 @@ def process_latest_pcap(ctl_name):
 
 if __name__ == '__main__':
     mac_log = process_latest_pcap('/home/traffic/unctrl')
-    mac_http_dict = dict()
+    mac_http_dict_list = []
     for dir_name, filename in mac_log.items():
         k = dir_name + '/' + filename
+        mac_http_dict = dict()
         mac_http_dict[k] = process_pcap(k)
-    print(json.dumps(mac_http_dict))
-    r = requests.post("http://54.193.126.147:3000/mac_address_data", data=json.dumps(mac_http_dict))
-    print(r.content)
+        mac_http_dict_list.append(mac_http_dict)
+    for mac_http_dict in mac_http_dict_list:
+        print(json.dumps(mac_http_dict))
+        r = requests.post("http://54.193.126.147:3000/mac_address_data", data=json.dumps(mac_http_dict))
+        print(r.content)
 
     # print(mac_http_dict)
     # ip_processed_data_dict = dict()
