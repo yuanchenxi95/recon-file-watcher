@@ -104,4 +104,5 @@ def process_pcap(file_path):
             return_list = process_http_requests(f)
         except:
             return_list = []
+        print(return_list)
         return return_list
