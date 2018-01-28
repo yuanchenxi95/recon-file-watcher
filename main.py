@@ -3,18 +3,30 @@ from http_log_process import process_http_log
 import os
 import json
 import requests
+import time
+import datetime
 
-if __name__ == '__main__':
+def convert_date_string_to_time_stamp(date_string):
+    return time.mktime(datetime.datetime.strptime(date_string, "%Y-%m-%d").timetuple())
+
+def find_the_latest_pcap_file(pcaps_list):
+    return max(pcaps_list,
+               lambda pcap_name: convert_date_string_to_time_stamp(pcap_name[:10]))
+
+def process_latest_pcap(ctl_name):
     mac_log_dict = dict()
-    for dir_name, dir_names, file_names in os.walk('/home/traffic/unctrl'):
+    for dir_name, dir_names, file_names in os.walk(ctl_name):
         # print path to all subdirectories first.
         files_with_pcap_extension = []
         for file in file_names:
             if file.endswith('.pcap'):
                 files_with_pcap_extension.append(file)
-        mac_log_dict[dir_name] = files_with_pcap_extension
 
-    print(mac_log_dict)
+        mac_log_dict[dir_name] = find_the_latest_pcap_file(files_with_pcap_extension)
+
+
+if __name__ == '__main__':
+
     # ip_processed_data_dict = dict()
     # for folder in mac_log_dict:
     #     for log_file in mac_log_dict[folder]:
