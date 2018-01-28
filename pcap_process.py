@@ -99,10 +99,8 @@ def process_http_requests(f):
 def process_pcap(file_path):
     """Open up a test pcap file and print out the packets"""
     with open(file_path, 'rb') as f:
-        print(file_path)
         try:
             return_list = process_http_requests(f)
         except:
             return_list = []
-        print(return_list)
         return return_list
