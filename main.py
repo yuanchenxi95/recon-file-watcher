@@ -11,8 +11,7 @@ def convert_date_string_to_time_stamp(pcap_name):
 
 
 def find_the_latest_pcap_file(pcaps_list):
-    return max(pcaps_list,
-               key=convert_date_string_to_time_stamp)
+    return max(pcaps_list, key=convert_date_string_to_time_stamp)
 
 
 def process_latest_pcap(ctl_name):
