@@ -5,25 +5,16 @@ from dpkt.compat import compat_ord
 import json
 
 
-class PcapDataClass:
-    def __init__(self, eth_src_mac, eth_dst_mac, src_ip, dst_ip, header_host, http_method, time_stamp):
-        self.eth_src_mac = eth_src_mac
-        self.eth_dst_mac = eth_dst_mac
-        self.src_ip = src_ip
-        self.dst_ip = dst_ip
-        self.header_host = header_host
-        self.http_method = http_method
-        self.time_stamp = time_stamp
-
-    def __repr__(self):
-        return str(self)
-
-    def __str__(self):
-        return json.dumps(self, default=lambda o: o.__dict__,
-                          sort_keys=True, indent=4)
-
-    def __dict__(self):
-        return self.__str__()
+def generate_pcap_dict(eth_src_mac, eth_dst_mac, src_ip, dst_ip, header_host, http_method, time_stamp):
+    pcap_dict = dict()
+    pcap_dict["eth_src_mac"] = eth_src_mac
+    pcap_dict["eth_dst_mac"] = eth_dst_mac
+    pcap_dict["src_ip"] = src_ip
+    pcap_dict["dst_ip"] = dst_ip
+    pcap_dict["header_host"] = header_host
+    pcap_dict["http_method"] = http_method
+    pcap_dict["time_stamp"] = time_stamp
+    return pcap_dict
 
 
 def mac_addr(address):
@@ -87,7 +78,7 @@ def process_http_requests(f):
             more_fragments = bool(ip.off & dpkt.ip.IP_MF)
             fragment_offset = ip.off & dpkt.ip.IP_OFFMASK
 
-            pcap_data_object = PcapDataClass(eth_src_mac=mac_addr(eth.src),
+            pcap_data_object = generate_pcap_dict(eth_src_mac=mac_addr(eth.src),
                                              eth_dst_mac=mac_addr(eth.dst),
                                              src_ip=inet_to_str(ip.src),
                                              dst_ip=inet_to_str(ip.dst),
