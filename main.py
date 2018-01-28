@@ -33,7 +33,7 @@ if __name__ == '__main__':
     for dir_name, filename in mac_log.items():
         k = dir_name + '/' + filename
         mac_http_dict[k] = process_pcap(k)
-    mac_http_dict["id"] = "1"
+        break
     print(json.dumps(mac_http_dict))
     r = requests.post("http://54.193.126.147:3000/mac_address_data", data=json.dumps(mac_http_dict))
     print(r.content)
