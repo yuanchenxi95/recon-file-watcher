@@ -22,6 +22,9 @@ class PcapDataClass:
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
 
+    def __dict__(self):
+        return self.__str__()
+
 
 def mac_addr(address):
     """Convert a MAC address to a readable/printable string
