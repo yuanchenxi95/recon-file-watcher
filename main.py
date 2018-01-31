@@ -36,8 +36,7 @@ if __name__ == '__main__':
         mac_http_dict[k] = process_pcap(k)
         mac_http_dict_list.append(mac_http_dict)
     for mac_http_dict in mac_http_dict_list:
-        print(json.dumps(mac_http_dict))
-        r = requests.post("http://54.193.126.147:3000/mac_address_data", json=mac_http_dict)
+        r = requests.put("http://54.193.126.147:3000/today_data", json=mac_http_dict)
         print(r.content)
 
     # print(mac_http_dict)
