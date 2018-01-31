@@ -39,10 +39,6 @@ def run_processing_today_pcap():
         print(r.content)
 
 
-def job():
-    print("I'm working...")
-
-
 if __name__ == '__main__':
     schedule.every(1).minutes.do(run_processing_today_pcap)
     while 1:
