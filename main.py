@@ -6,6 +6,7 @@ import requests
 import time
 import datetime
 
+
 def convert_date_string_to_time_stamp(pcap_name):
     return time.mktime(datetime.datetime.strptime(pcap_name[:10], "%Y-%m-%d").timetuple())
 
@@ -33,8 +34,8 @@ if __name__ == '__main__':
         k = dir_name + '/' + filename
         mac_http_dict = dict()
         mac_http_dict["data"] = process_pcap(k)
-        mac_http_dict["id"] = filename
-        r = requests.post("http://54.193.126.147:3000/today_data", json=mac_http_dict)
+        mac_http_dict["id"] = dir_name
+        r = requests.put("http://54.193.126.147:3000/today_data", json=mac_http_dict)
         print(r.content)
 
     # print(mac_http_dict)
