@@ -6,6 +6,8 @@ import requests
 import time
 import datetime
 import schedule
+import logging
+
 
 def convert_date_string_to_time_stamp(pcap_name):
     return time.mktime(datetime.datetime.strptime(pcap_name[:10], "%Y-%m-%d").timetuple())
@@ -36,11 +38,13 @@ def run_processing_today_pcap():
         mac_http_dict["data"] = process_pcap(k)
         mac_http_dict["id"] = dir_name[21:]
         r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
-        print(r.content)
+        # print(r.content)
 
 
 if __name__ == '__main__':
     schedule.every(1).minutes.do(run_processing_today_pcap)
+    logging.basicConfig(filename='run_status.log', level=logging.DEBUG)
+    logging.debug('This message should go to the log file')
     while 1:
         schedule.run_pending()
         time.sleep(1)
