@@ -29,13 +29,11 @@ def process_latest_pcap(ctl_name):
 
 if __name__ == '__main__':
     mac_log = process_latest_pcap('/home/traffic/unctrl')
-    mac_http_dict_list = []
     for dir_name, filename in mac_log.items():
         k = dir_name + '/' + filename
         mac_http_dict = dict()
-        mac_http_dict[k] = process_pcap(k)
-        mac_http_dict_list.append(mac_http_dict)
-    for mac_http_dict in mac_http_dict_list:
+        mac_http_dict["data"] = process_pcap(k)
+        mac_http_dict["id"] = filename
         r = requests.post("http://54.193.126.147:3000/today_data", json=mac_http_dict)
         print(r.content)
 
