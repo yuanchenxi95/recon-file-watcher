@@ -32,19 +32,22 @@ def process_latest_pcap(ctl_name):
 
 def run_processing_today_pcap():
     mac_log = process_latest_pcap('/home/traffic/unctrl')
+    logging.info('-----------------------------------')
+    logging.info(str(datetime.datetime.now))
+
     for dir_name, filename in mac_log.items():
         k = dir_name + '/' + filename
         mac_http_dict = dict()
         mac_http_dict["data"] = process_pcap(k)
         mac_http_dict["id"] = dir_name[21:]
         r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
+        logging.info(mac_http_dict["id"] + " status: " + r.content)
         # print(r.content)
 
 
 if __name__ == '__main__':
     schedule.every(1).minutes.do(run_processing_today_pcap)
     logging.basicConfig(filename='run_status.log', level=logging.DEBUG)
-    logging.debug('This message should go to the log file')
     while 1:
         schedule.run_pending()
         time.sleep(1)
