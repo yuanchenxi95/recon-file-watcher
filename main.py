@@ -32,8 +32,6 @@ def process_latest_pcap(ctl_name):
 
 def run_processing_today_pcap():
     mac_log = process_latest_pcap('/home/traffic/unctrl')
-    logging.info('-----------------------------------')
-    logging.info(str(datetime.datetime.now))
 
     for dir_name, filename in mac_log.items():
         k = dir_name + '/' + filename
@@ -45,11 +43,16 @@ def run_processing_today_pcap():
 
 
 if __name__ == '__main__':
-    schedule.every(1).minutes.do(run_processing_today_pcap)
-    logging.basicConfig(filename='run_status.log', level=logging.DEBUG)
-    while 1:
-        schedule.run_pending()
-        time.sleep(1)
+    logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
+    logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
+    run_processing_today_pcap()
+
+# if __name__ == '__main__':
+#     schedule.every(1).minutes.do(run_processing_today_pcap)
+#     logging.basicConfig(filename='run_status.log', level=logging.DEBUG)
+#     while 1:
+#         schedule.run_pending()
+#         time.sleep(1)
 
     # print(mac_http_dict)
     # ip_processed_data_dict = dict()
