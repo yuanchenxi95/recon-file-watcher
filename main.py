@@ -41,7 +41,6 @@ def run_processing_today_pcap():
         mac_http_dict["data"] = process_pcap(k)
         mac_http_dict["id"] = dir_name[21:]
         r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
-        logging.info(mac_http_dict["id"] + " status: " + str(r.content))
         # print(r.content)
 
 
