@@ -35,7 +35,7 @@ if __name__ == '__main__':
         mac_http_dict = dict()
         mac_http_dict["data"] = process_pcap(k)
         mac_http_dict["id"] = dir_name
-        r = requests.put("http://54.193.126.147:3000/today_data", json=mac_http_dict)
+        r = requests.put("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
         print(r.content)
 
     # print(mac_http_dict)
