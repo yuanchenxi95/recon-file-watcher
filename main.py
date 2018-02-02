@@ -37,6 +37,8 @@ def run_processing_today_pcap():
         k = dir_name + '/' + filename
         mac_http_dict = dict()
         mac_http_dict["data"] = process_pcap(k)
+        if len(mac_http_dict["data"]) == 0:
+            continue
         mac_http_dict["id"] = dir_name[21:]
         r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
         # print(r.content)
