@@ -1,6 +1,18 @@
 import json
 
 
+def generate_http_dict(src_ip, dst_ip,src_port, dst_port, host, http_method, time_stamp):
+    http_dict = dict()
+    http_dict["src_ip"] = src_ip
+    http_dict["dst_ip"] = dst_ip
+    http_dict["src_port"] = src_port
+    http_dict["dst_port"] = dst_port
+    http_dict["host"] = host
+    http_dict["http_method"] = http_method
+    http_dict["time_stamp"] = time_stamp
+    return http_dict
+
+
 class HttpLogData:
     def __init__(self, src_ip, dst_ip, src_port, dst_port, host, http_method, time_stamp):
         self.src_ip = src_ip
@@ -10,7 +22,6 @@ class HttpLogData:
         self.host = host
         self.http_method = http_method
         self.time_stamp = time_stamp
-
 
     def __repr__(self):
         return str(self)
@@ -41,6 +52,12 @@ def process_http_log(file_path):
             host = convert_bytes_string_regular_string(words[8])
             http_method = convert_bytes_string_regular_string(words[7])
             time_stamp = convert_bytes_string_regular_string(words[0])
-            http_log_data = HttpLogData(src_ip, dst_ip, src_port, dst_port, host, http_method, time_stamp)
+            http_log_data = generate_http_dict(src_ip=src_ip,
+                                               dst_ip=dst_ip,
+                                               src_port=src_port,
+                                               dst_port=dst_port,
+                                               host=host,
+                                               http_method=http_method,
+                                               time_stamp=time_stamp)
             http_log_data_list.append(http_log_data)
         return http_log_data_list

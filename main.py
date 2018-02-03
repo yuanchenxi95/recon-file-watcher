@@ -1,13 +1,12 @@
-from pcap_process import process_pcap
-from http_log_process import process_http_log
-import os
-import json
-import requests
-import time
 import datetime
-import schedule
 import logging
+import os
+import time
 
+import requests
+
+from pcap_process import process_pcap
+from http_log_watcher import log_watcher
 
 def convert_date_string_to_time_stamp(pcap_name):
     return time.mktime(datetime.datetime.strptime(pcap_name[:10], "%Y-%m-%d").timetuple())
@@ -45,9 +44,11 @@ def run_processing_today_pcap():
 
 
 if __name__ == '__main__':
-    logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
-    logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
-    run_processing_today_pcap()
+    # logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
+    # logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
+    # run_processing_today_pcap()
+    log_watcher.run_processing_log_files_of_all_directories()
+
 
 # if __name__ == '__main__':
 #     schedule.every(1).minutes.do(run_processing_today_pcap)
