@@ -15,25 +15,32 @@ def get_logfile_list(ctl_name):
     return mac_log_dict
 
 
-def get_log_file_uri(mac_address, date_string):
+def get_log_file_uri(mac_address, date_string, requst_type):
     api_uri = 'http://54.193.126.147:3000/api/networkData/logFileData/'
-    return api_uri + mac_address + '/' + date_string
+    return api_uri + mac_address + '/' + date_string + '/' + requst_type
 
 
 def run_processing_log_files_of_all_directories():
     mac_log = get_logfile_list('/home/traffic/unctrl')
-    mac_http_dict = dict()
-    api_uri = "http://54.193.126.147:3000/api/networkData/logFileData/"
+    # mac_http_dict = dict()
 
     for dir_name, log_name_list in mac_log.items():
-        http_data_dict = dict()
+        # http_data_dict = dict()
         mac_address = dir_name[21:]
-        mac_http_dict[mac_address] = http_data_dict
+        # mac_http_dict[mac_address] = http_data_dict
         for log_name in log_name_list:
             k = dir_name + '/' + log_name
+            if str.startswith(log_name, 'https-'):
+                requst_type = 'https'
+                date_string = log_name[len('https-'):-(len('log'))]
+            elif str.startswith(log_name, 'http-'):
+                requst_type = 'http'
+                date_string = log_name[len('http-'):-(len('log'))]
+            else:
+                raise ValueError("Invalid HTTP logfile, the file should start with 'http' or 'https'")
+
             http_log_list = process_http_log(k)
-            http_data_dict[log_name] = http_log_list
-            if len(http_data_dict[log_name]) == 0:
+            if len(http_log_list) == 0:
                 continue
-            r = requests.post(get_log_file_uri(mac_address, log_name), json=http_log_list)
-            print(r.content)
+            # http_data_dict[date_string] = http_log_list
+            r = requests.post(get_log_file_uri(mac_address, date_string, requst_type), json=http_log_list)
