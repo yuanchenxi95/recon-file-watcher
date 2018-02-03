@@ -1,5 +1,6 @@
 from .http_log_process import process_http_log
 import os
+import json
 
 
 def get_logfile_list(ctl_name):
@@ -26,6 +27,8 @@ def run_processing_log_files_of_all_directories():
             http_data_dict[log_name] = process_http_log(k)
             if len(http_data_dict[log_name]) == 0:
                 continue
-    print(mac_http_dict)
+    with open('result.json', 'w') as fp:
+        json.dump(mac_http_dict, fp)
+
         # r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
         # print(r.content)
