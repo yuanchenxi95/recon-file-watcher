@@ -32,10 +32,10 @@ def run_processing_log_files_of_all_directories():
             k = dir_name + '/' + log_name
             if str.startswith(log_name, 'https-'):
                 request_type = 'https'
-                date_string = log_name[len('https-'):-(len('log'))]
+                date_string = log_name[len('https-'):-(len('.log'))]
             elif str.startswith(log_name, 'http-'):
                 request_type = 'http'
-                date_string = log_name[len('http-'):-(len('log'))]
+                date_string = log_name[len('http-'):-(len('.log'))]
             else:
                 raise ValueError("Invalid HTTP logfile, the file should start with 'http' or 'https'")
 
