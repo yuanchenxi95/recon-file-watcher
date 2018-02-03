@@ -16,14 +16,16 @@ def get_logfile_list(ctl_name):
 
 def run_processing_log_files_of_all_directories():
     mac_log = get_logfile_list('/home/traffic/unctrl')
+    mac_http_dict = dict()
 
-    print(mac_log)
-    # for dir_name, filename in mac_log.items():
-    #     k = dir_name + '/' + filename
-    #     mac_http_dict = dict()
-    #     mac_http_dict["data"] = process_pcap(k)
-    #     if len(mac_http_dict["data"]) == 0:
-    #         continue
-    #     mac_http_dict["id"] = dir_name[21:]
-    #     r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
+    for dir_name, log_name_list in mac_log.items():
+        http_data_dict = dict()
+        mac_http_dict[dir_name[21:]] = http_data_dict
+        for log_name in log_name_list:
+            k = dir_name + '/' + log_name
+            http_data_dict[log_name] = process_http_log(k)
+            if len(http_data_dict[log_name]) == 0:
+                continue
+    print(mac_http_dict)
+        # r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
         # print(r.content)
