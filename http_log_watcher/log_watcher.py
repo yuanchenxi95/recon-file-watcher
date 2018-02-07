@@ -34,7 +34,6 @@ def get_last_time_processed_line(db, file_path):
 def check_last_update_time(db, file_path, last_update_time):
     if file_path not in db['update_time']:
         return True
-    print("filepath: " + file_path + ", " + float(db['update_time'][file_path]))
     return float(last_update_time) > float(db['update_time'][file_path])
 
 
@@ -71,6 +70,7 @@ def run_processing_log_files_of_all_directories(db):
             last_time_line = get_last_time_processed_line(db, file_path)
             logging.info("processing file: " + file_path)
             logging.info("file_last_modified_time: " + str(file_last_modified_time))
+            print(check_last_update_time(db, file_path, file_last_modified_time))
             if check_last_update_time(db, file_path, file_last_modified_time):
                 logging.info("process the file")
                 http_log_list, this_time_line = process_http_log(file_path, last_time_line)
