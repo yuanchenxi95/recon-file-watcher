@@ -35,12 +35,18 @@ def convert_bytes_string_regular_string(bytes_string):
     return str(bytes_string, 'utf-8')
 
 
-def process_http_log(file_path):
+def process_http_log(file_path, line_number_should_skipped):
     """Open up a test pcap file and print out the packets"""
     http_log_data_list = []
+    line_count = 0
     with open(file_path, 'rb') as f:
+        # skip the processed_lines
+
         flag = True
         for line in f:
+            line_count += 1
+            for i in range(line_number_should_skipped):
+                f.next()
             if not flag:
                 flag = True
                 continue
@@ -60,4 +66,4 @@ def process_http_log(file_path):
                                                http_method=http_method,
                                                time_stamp=time_stamp)
             http_log_data_list.append(http_log_data)
-        return http_log_data_list
+        return http_log_data_list, line_count

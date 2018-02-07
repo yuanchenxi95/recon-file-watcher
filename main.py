@@ -43,11 +43,26 @@ def run_processing_today_pcap():
         # print(r.content)
 
 
+def load_from_db():
+    import json
+    with open('db/db.json') as json_data:
+        d = json.load(json_data)
+        return d
+
+
+def write_to_db(data):
+    import json
+    with open('db/db.json', 'w') as  json_data:
+        json.dump(data, json_data)
+
+
 if __name__ == '__main__':
     # logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
     # logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
     # run_processing_today_pcap()
-    log_watcher.run_processing_log_files_of_all_directories()
+    db = load_from_db()
+    log_watcher.run_processing_log_files_of_all_directories(db=db)
+    write_to_db(db)
 
 
 # if __name__ == '__main__':
