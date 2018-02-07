@@ -39,6 +39,9 @@ def process_http_log(file_path, line_number_should_skipped):
     """Open up a test pcap file and print out the packets"""
     http_log_data_list = []
     line_count = 0
+    print('-------------------------------------')
+    print(line_number_should_skipped)
+
     with open(file_path, 'rb') as f:
         # skip the processed_lines
         for line in f:
