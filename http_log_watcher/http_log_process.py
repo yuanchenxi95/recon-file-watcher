@@ -46,7 +46,7 @@ def process_http_log(file_path, line_number_should_skipped):
         for line in f:
             line_count += 1
             for i in range(line_number_should_skipped):
-                f.next()
+                continue
             if not flag:
                 flag = True
                 continue
