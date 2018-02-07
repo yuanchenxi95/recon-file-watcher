@@ -65,7 +65,7 @@ def run_processing_log_files_of_all_directories(db):
             file_last_modified_time = get_file_last_modified_time(file_path)
             last_time_line = get_last_time_processed_line(db, file_path)
             logging.info("processing file: " + file_path)
-            logging.info("file_last_modified_time: " + file_last_modified_time)
+            logging.info("file_last_modified_time: " + str(file_last_modified_time))
             if check_last_update_time(db, file_path, file_last_modified_time):
                 logging.info("process the file")
                 http_log_list, this_time_line = process_http_log(file_path, last_time_line)
