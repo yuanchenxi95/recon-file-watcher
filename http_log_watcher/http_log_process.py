@@ -41,14 +41,10 @@ def process_http_log(file_path, line_number_should_skipped):
     line_count = 0
     with open(file_path, 'rb') as f:
         # skip the processed_lines
-
-        flag = True
         for line in f:
             line_count += 1
             for i in range(line_number_should_skipped):
-                continue
-            if not flag:
-                flag = True
+                print(i)
                 continue
             words = line.split()
             src_ip = convert_bytes_string_regular_string(words[2])
