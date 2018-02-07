@@ -34,7 +34,7 @@ def get_last_time_processed_line(db, file_path):
 def check_last_update_time(db, file_path, last_update_time):
     if file_path not in db['update_time']:
         return True
-    print("filepath: " + file_path + ", " + float(db['update_time'][file_path])
+    print("filepath: " + file_path + ", " + float(db['update_time'][file_path]))
     return float(last_update_time) > float(db['update_time'][file_path])
 
 
