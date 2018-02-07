@@ -62,6 +62,7 @@ if __name__ == '__main__':
     logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.DEBUG)
+    logging.getLogger().addHandler(ch)
     # run_processing_today_pcap()
     db = load_from_db()
     log_watcher.run_processing_log_files_of_all_directories(db=db)
