@@ -49,14 +49,14 @@ def run_processing_today_pcap():
 
 def load_from_db():
     import json
-    with open('db/db.json') as json_data:
+    with open('/home/chenxi/recon-file-watcher/db/db.json') as json_data:
         d = json.load(json_data)
         return d
 
 
 def write_to_db(data):
     import json
-    with open('db/db.json', 'w') as  json_data:
+    with open('/home/chenxi/recon-file-watcher/db/db.json', 'w') as  json_data:
         json.dump(data, json_data)
 
 
