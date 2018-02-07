@@ -3,11 +3,14 @@ import logging
 import os
 import time
 import sys
+import urllib
 
 import requests
 
 from pcap_process import process_pcap
 from http_log_watcher import log_watcher
+
+REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
 
 def convert_date_string_to_time_stamp(pcap_name):
     return time.mktime(datetime.datetime.strptime(pcap_name[:10], "%Y-%m-%d").timetuple())
@@ -57,16 +60,22 @@ def write_to_db(data):
         json.dump(data, json_data)
 
 
+def check_server_is_on():
+    try:
+        requests.get('http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000')
+        return True
+    except requests.exceptions.ConnectionError:
+        return False
+
+
 if __name__ == '__main__':
-    logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
-    logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
-    ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
-    logging.getLogger().addHandler(ch)
-    # run_processing_today_pcap()
-    db = load_from_db()
-    log_watcher.run_processing_log_files_of_all_directories(db=db)
-    write_to_db(db)
+    print(check_server_is_on())
+    # logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
+    # logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
+    # # run_processing_today_pcap()
+    # db = load_from_db()
+    # log_watcher.run_processing_log_files_of_all_directories(db=db)
+    # write_to_db(db)
 
 
 # if __name__ == '__main__':

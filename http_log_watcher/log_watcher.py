@@ -4,6 +4,10 @@ import requests
 import time
 import logging
 
+
+REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
+
+
 def get_logfile_list(ctl_name):
     mac_log_dict = dict()
     for dir_name, dir_names, file_names in os.walk(ctl_name):
@@ -17,7 +21,7 @@ def get_logfile_list(ctl_name):
 
 
 def get_log_file_uri(mac_address, date_string, request_type):
-    api_uri = 'http://54.193.126.147:3000/api/networkData/logFileData/'
+    api_uri = REMOTE_HOST + '/api/networkData/logFileData/'
     return api_uri + mac_address + '/' + date_string + '/' + request_type
 
 
@@ -74,7 +78,7 @@ def run_processing_log_files_of_all_directories(db):
                 if len(http_log_list) == 0:
                     continue
                 # http_data_dict[date_string] = http_log_list
-                requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
+                # requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
             else:
                 logging.info("skip the file")
                 continue
