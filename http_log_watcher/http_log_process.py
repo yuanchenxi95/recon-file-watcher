@@ -46,9 +46,9 @@ def process_http_log(file_path, line_number_should_skipped):
         # skip the processed_lines
         for line in f:
             line_count += 1
-            for i in range(line_number_should_skipped):
-                print(i)
+            if line_number_should_skipped == 0 or line_count <= line_number_should_skipped:
                 continue
+
             words = line.split()
             src_ip = convert_bytes_string_regular_string(words[2])
             dst_ip = convert_bytes_string_regular_string(words[4])
