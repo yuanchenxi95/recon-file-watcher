@@ -77,7 +77,6 @@ def run_processing_log_files_of_all_directories(db):
 
                 if len(http_log_list) == 0:
                     continue
-                print(http_log_list)
                 # http_data_dict[date_string] = http_log_list
                 requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
             else:
