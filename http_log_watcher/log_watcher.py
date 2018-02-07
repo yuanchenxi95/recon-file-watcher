@@ -2,6 +2,7 @@ from .http_log_process import process_http_log
 import os
 import requests
 import time
+import logging
 
 def get_logfile_list(ctl_name):
     mac_log_dict = dict()
@@ -63,10 +64,17 @@ def run_processing_log_files_of_all_directories(db):
             # check whether to process the file
             file_last_modified_time = get_file_last_modified_time(file_path)
             last_time_line = get_last_time_processed_line(db, file_path)
+            logging.info("processing file: " + file_path)
+            logging.info("file_last_modified_time: " + file_last_modified_time)
             if check_last_update_time(db, file_path, file_last_modified_time):
+                logging.info("process the file")
                 http_log_list, this_time_line = process_http_log(file_path, last_time_line)
                 write_modified_data(db, file_path, file_last_modified_time, this_time_line)
+
                 if len(http_log_list) == 0:
                     continue
                 # http_data_dict[date_string] = http_log_list
                 # r = requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
+            else:
+                logging.info("skip the file")
+                continue

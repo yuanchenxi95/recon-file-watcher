@@ -57,8 +57,8 @@ def write_to_db(data):
 
 
 if __name__ == '__main__':
-    # logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
-    # logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
+    logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
+    logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
     # run_processing_today_pcap()
     db = load_from_db()
     log_watcher.run_processing_log_files_of_all_directories(db=db)
