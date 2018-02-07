@@ -51,7 +51,6 @@ def load_from_db():
     import json
     with open('/home/chenxi/recon-file-watcher/db/db.json', 'r') as json_data:
         d = json.load(json_data)
-        print(d)
         return d
 
 
