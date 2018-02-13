@@ -3,10 +3,11 @@ import os
 import requests
 import time
 import logging
+from datetime import datetime
 
 
 REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
-
+FEBRUARY_DATE_TIME = datetime(2018, 2, 1)
 
 def get_logfile_list(ctl_name):
     mac_log_dict = dict()
@@ -64,6 +65,11 @@ def run_processing_log_files_of_all_directories(db):
                 date_string = log_name[len('http-'):-(len('.log'))]
             else:
                 raise ValueError("Invalid HTTP logfile, the file should start with 'http' or 'https'")
+
+            parsed_datetime = datetime.strptime(date_string, "%Y-%m-%d")
+
+            if FEBRUARY_DATE_TIME > parsed_datetime:
+                continue
 
             # check whether to process the file
             file_last_modified_time = get_file_last_modified_time(file_path)
