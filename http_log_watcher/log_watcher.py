@@ -9,6 +9,14 @@ from datetime import datetime
 REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
 FEBRUARY_DATE_TIME = datetime(2018, 2, 1)
 
+FILE_PATH = 'file_path'
+LINE_NUMBER_PROCESSED = 'line_number_processed'
+UPDATE_TIME = 'update_time'
+
+
+def get_file_log(file_processing, file_path):
+    return file_processing.find_one({ FILE_PATH: file_path })
+
 def get_logfile_list(ctl_name):
     mac_log_dict = dict()
     for dir_name, dir_names, file_names in os.walk(ctl_name):
@@ -26,28 +34,34 @@ def get_log_file_uri(mac_address, date_string, request_type):
     return api_uri + mac_address + '/' + date_string + '/' + request_type
 
 
-def get_last_time_processed_line(db, file_path):
-    if file_path not in db['last_time_line']:
+def get_last_time_processed_line(file_log):
+    if file_log is None:
         return 0
-    return db['last_time_line'][file_path]
+    return file_log[LINE_NUMBER_PROCESSED]
 
 
-def check_last_update_time(db, file_path, last_update_time):
-    if file_path not in db['update_time']:
+def check_last_update_time(file_log, last_update_time):
+    if file_log is None:
         return True
-    return float(last_update_time) > float(db['update_time'][file_path])
+    return float(last_update_time) > float(file_log[UPDATE_TIME])
 
 
 def get_file_last_modified_time(file_path):
     return os.path.getmtime(file_path)
 
 
-def write_modified_data(db, file_path, file_last_modified_time, this_time_line):
-    db['update_time'][file_path] = file_last_modified_time
-    db['last_time_line'][file_path] = this_time_line
+def write_modified_data(file_processing_query, file_path, file_last_modified_time, this_time_line):
+    new_log = {
+        FILE_PATH: file_path,
+        LINE_NUMBER_PROCESSED: this_time_line,
+        UPDATE_TIME: file_last_modified_time
+    }
+    file_processing_query.update({
+        FILE_PATH: file_path
+    }, new_log, upsert=True)
 
 
-def run_processing_log_files_of_all_directories(db):
+def run_processing_log_files_of_all_directories(file_processing_query):
     mac_log = get_logfile_list('/home/traffic/unctrl')
     # mac_http_dict = dict()
 
@@ -68,18 +82,20 @@ def run_processing_log_files_of_all_directories(db):
 
             parsed_datetime = datetime.strptime(date_string, "%Y-%m-%d")
 
+            # skip the file before january
             if FEBRUARY_DATE_TIME > parsed_datetime:
                 continue
 
             # check whether to process the file
             file_last_modified_time = get_file_last_modified_time(file_path)
-            last_time_line = get_last_time_processed_line(db, file_path)
+            file_log = get_file_log(file_processing_query, file_path)
+            last_time_line = get_last_time_processed_line(file_log)
             logging.info("processing file: " + file_path)
             logging.info("file_last_modified_time: " + str(file_last_modified_time))
-            if check_last_update_time(db, file_path, file_last_modified_time):
+            if check_last_update_time(file_log, file_last_modified_time):
                 logging.info("process the file")
                 http_log_list, this_time_line = process_http_log(file_path, last_time_line)
-                write_modified_data(db, file_path, file_last_modified_time, this_time_line)
+                write_modified_data(file_processing_query, file_path, file_last_modified_time, this_time_line)
 
                 if len(http_log_list) == 0:
                     continue

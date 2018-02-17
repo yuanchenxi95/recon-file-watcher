@@ -12,6 +12,17 @@ from http_log_watcher import log_watcher
 
 REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
 
+MONGO_DB_ADDRESS = 'MONGO_DB_ADDRESS'
+
+
+def load_env():
+    from dotenv import load_dotenv, find_dotenv
+    from os import path, environ
+    dotenv_path = path.join(path.dirname(__file__), './config/.env')
+    load_dotenv(dotenv_path)
+    if MONGO_DB_ADDRESS not in environ:
+        raise Exception('Env variable "' + MONGO_DB_ADDRESS + '" missing')
+
 def convert_date_string_to_time_stamp(pcap_name):
     return time.mktime(datetime.datetime.strptime(pcap_name[:10], "%Y-%m-%d").timetuple())
 
@@ -47,17 +58,10 @@ def run_processing_today_pcap():
         # print(r.content)
 
 
-def load_from_db():
-    import json
-    with open('/home/chenxi/recon-file-watcher/db/db.json', 'r') as json_data:
-        d = json.load(json_data)
-        return d
-
-
-def write_to_db(data):
-    import json
-    with open('/home/chenxi/recon-file-watcher/db/db.json', 'w') as  json_data:
-        json.dump(data, json_data)
+def get_file_processing_collection():
+    from pymongo import MongoClient
+    client = MongoClient(os.environ[MONGO_DB_ADDRESS], serverSelectionTimeoutMS=1)
+    return client['moniotr']['py-file-processing-log']
 
 
 def check_server_is_on():
@@ -70,12 +74,11 @@ def check_server_is_on():
 
 if __name__ == '__main__':
     logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
+    load_env()
     logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
     if check_server_is_on():
-        # run_processing_today_pcap()
-        db = load_from_db()
-        log_watcher.run_processing_log_files_of_all_directories(db=db)
-        write_to_db(db)
+        file_processing_query = get_file_processing_collection()
+        log_watcher.run_processing_log_files_of_all_directories(file_processing_query=file_processing_query)
     else:
         logging.info("Server is down")
 
