@@ -23,6 +23,7 @@ def load_env():
     if MONGO_DB_ADDRESS not in environ:
         raise Exception('Env variable "' + MONGO_DB_ADDRESS + '" missing')
 
+
 def convert_date_string_to_time_stamp(pcap_name):
     return time.mktime(datetime.datetime.strptime(pcap_name[:10], "%Y-%m-%d").timetuple())
 
