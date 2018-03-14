@@ -53,7 +53,9 @@ def get_file_last_modified_time(file_path):
 
 def write_http_log_data(http_data_query, http_log_list):
     for http_log in http_log_list:
-        http_data_query.update_one(http_log, http_log, upsert=True)
+        http_data_query.update_one(http_log, {
+            "$set": http_log
+        }, upsert=True)
 
 
 def write_modified_data(file_processing_query, file_path, file_last_modified_time, this_time_line):
