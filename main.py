@@ -16,7 +16,7 @@ MONGO_DB_ADDRESS = 'MONGO_DB_ADDRESS'
 
 
 def load_env():
-    from dotenv import load_dotenv, find_dotenv
+    from dotenv import load_dotenv
     from os import path, environ
     dotenv_path = path.join(path.dirname(__file__), './config/.env')
     load_dotenv(dotenv_path)
@@ -58,11 +58,10 @@ def run_processing_today_pcap():
         r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
         # print(r.content)
 
-
-def get_file_processing_collection():
+def get_mongo_client():
     from pymongo import MongoClient
     client = MongoClient(os.environ[MONGO_DB_ADDRESS], serverSelectionTimeoutMS=1)
-    return client['moniotr']['py-file-processing-log']
+    return client['moniotr']
 
 
 def check_server_is_on():
@@ -77,9 +76,9 @@ if __name__ == '__main__':
     logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
     load_env()
     logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
+    mongo_client = get_mongo_client()
     if check_server_is_on():
-        file_processing_query = get_file_processing_collection()
-        log_watcher.run_processing_log_files_of_all_directories(file_processing_query=file_processing_query)
+        log_watcher.run_processing_log_files_of_all_directories(mongo_client=mongo_client)
     else:
         logging.info("Server is down")
 

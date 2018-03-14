@@ -17,6 +17,7 @@ UPDATE_TIME = 'update_time'
 def get_file_log(file_processing, file_path):
     return file_processing.find_one({ FILE_PATH: file_path })
 
+
 def get_logfile_list(ctl_name):
     mac_log_dict = dict()
     for dir_name, dir_names, file_names in os.walk(ctl_name):
@@ -50,6 +51,11 @@ def get_file_last_modified_time(file_path):
     return os.path.getmtime(file_path)
 
 
+def write_http_log_data(http_data_query, http_log_list):
+    for http_log in http_log_list:
+        http_data_query.update_one(http_log, http_log, upsert=True)
+
+
 def write_modified_data(file_processing_query, file_path, file_last_modified_time, this_time_line):
     new_log = {
         FILE_PATH: file_path,
@@ -61,7 +67,17 @@ def write_modified_data(file_processing_query, file_path, file_last_modified_tim
     }, new_log, upsert=True)
 
 
-def run_processing_log_files_of_all_directories(file_processing_query):
+def get_file_processing_collection(mongo_client):
+    return mongo_client['py-file-processing-log']
+
+
+def get_http_data_collection(mongo_client):
+    return mongo_client['httpdatas']
+
+
+def run_processing_log_files_of_all_directories(mongo_client):
+    file_processing_query = get_file_processing_collection(mongo_client=mongo_client)
+    http_data_query = get_http_data_collection(mongo_client=mongo_client)
     mac_log = get_logfile_list('/home/traffic/unctrl')
     # mac_http_dict = dict()
 
@@ -100,7 +116,8 @@ def run_processing_log_files_of_all_directories(file_processing_query):
                 if len(http_log_list) == 0:
                     continue
                 # http_data_dict[date_string] = http_log_list
-                requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
+                # requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
+                write_http_log_data(http_data_query, http_log_list)
             else:
                 logging.info("skip the file")
                 continue
