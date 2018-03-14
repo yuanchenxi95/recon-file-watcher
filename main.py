@@ -61,7 +61,7 @@ def run_processing_today_pcap():
 def get_mongo_client():
     from pymongo import MongoClient
     client = MongoClient(os.environ[MONGO_DB_ADDRESS], serverSelectionTimeoutMS=1)
-    return client['moniotr']
+    return client['test-moniotr']
 
 
 def check_server_is_on():
