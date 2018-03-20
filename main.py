@@ -72,7 +72,8 @@ def check_server_is_on():
         return False
 
 
-if __name__ == '__main__':
+def main():
+    print(str(datetime.datetime.now()))
     logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
     load_env()
     logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
@@ -81,6 +82,12 @@ if __name__ == '__main__':
         log_watcher.run_processing_log_files_of_all_directories(mongo_client=mongo_client)
     else:
         logging.info("Server is down")
+
+
+if __name__ == '__main__':
+    import sched, time
+    s = sched.scheduler(time.time, time.sleep)
+    s.enter(5, 1, main, ())
 
 
 # if __name__ == '__main__':
