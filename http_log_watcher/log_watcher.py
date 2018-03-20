@@ -71,7 +71,19 @@ def get_file_processing_collection(mongo_client):
 
 
 def get_http_data_collection(mongo_client):
-    return mongo_client['httpdatas']
+    from pymongo import TEXT
+    http_data_collection = mongo_client['httpdatas']
+    http_data_collection.create_index(
+        [('src_ip', TEXT),
+         ('dst_ip', TEXT),
+         ('src_port', TEXT),
+         ('dst_port', TEXT),
+         ('host', TEXT),
+         ('http_method', TEXT),
+         ('time_stamp', TEXT)],
+        name='compound_index',
+        unique=True)
+    return http_data_collection
 
 
 def run_processing_log_files_of_all_directories(mongo_client):
