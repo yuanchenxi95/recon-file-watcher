@@ -86,8 +86,8 @@ if __name__ == '__main__':
             log_watcher.run_processing_log_files_of_all_directories(mongo_client=mongo_client)
         else:
             logging.info("Server is down")
-        s.enter(5, 1, main_loop, ())
-    s.enter(5, 1, main_loop, ())
+        s.enter(3, 1, main_loop, ())
+    s.enter(3, 1, main_loop, ())
     s.run()
 
 
