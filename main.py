@@ -76,7 +76,7 @@ if __name__ == '__main__':
     import sched, time
     s = sched.scheduler(time.time, time.sleep)
 
-    def main():
+    def main_loop():
         print(str(datetime.datetime.now()))
         logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
         load_env()
@@ -86,8 +86,9 @@ if __name__ == '__main__':
             log_watcher.run_processing_log_files_of_all_directories(mongo_client=mongo_client)
         else:
             logging.info("Server is down")
-        s.enter(5, 1, main, ())
-    s.enter(5, 1, main, ())
+        s.enter(5, 1, main_loop, ())
+    s.enter(5, 1, main_loop, ())
+    s.run()
 
 
 
