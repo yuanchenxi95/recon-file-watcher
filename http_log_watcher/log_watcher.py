@@ -71,17 +71,7 @@ def get_file_processing_collection(mongo_client):
 
 
 def get_http_data_collection(mongo_client):
-    from pymongo import TEXT
     http_data_collection = mongo_client['httpdatas']
-    http_data_collection.create_index(
-        [('src_ip', TEXT),
-         ('dst_ip', TEXT),
-         ('src_port', TEXT),
-         ('dst_port', TEXT),
-         ('host', TEXT),
-         ('http_method', TEXT),
-         ('time_stamp', TEXT)],
-        unique=True)
     return http_data_collection
 
 
