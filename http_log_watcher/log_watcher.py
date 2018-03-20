@@ -106,10 +106,11 @@ def run_processing_log_files_of_all_directories(mongo_db):
             file_last_modified_time = get_file_last_modified_time(file_path)
             file_log = get_file_log(file_processing_query, file_path)
             last_time_line = get_last_time_processed_line(file_log)
-            logging.info("processing file: " + file_path)
-            logging.info("file_last_modified_time: " + str(file_last_modified_time))
+
             if check_last_update_time(file_log, file_last_modified_time):
-                logging.info("process the file")
+                logging.info(file_path)
+                logging.info("file_last_modified_time: " + str(file_last_modified_time))
+                logging.info("processing the file")
                 http_log_list, this_time_line = process_http_log(file_path, last_time_line)
                 write_modified_data(file_processing_query, file_path, file_last_modified_time, this_time_line)
 
@@ -119,5 +120,5 @@ def run_processing_log_files_of_all_directories(mongo_db):
                 # requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
                 write_http_log_data(http_data_query, http_log_list)
             else:
-                logging.info("skip the file")
+                # logging.info("skip the file")
                 continue
