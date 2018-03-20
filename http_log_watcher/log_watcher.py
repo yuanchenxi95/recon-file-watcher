@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 
 
-REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
+# REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
 FEBRUARY_DATE_TIME = datetime(2018, 3, 1)
 
 FILE_PATH = 'file_path'
@@ -75,9 +75,9 @@ def get_http_data_collection(mongo_client):
     return http_data_collection
 
 
-def run_processing_log_files_of_all_directories(mongo_client):
-    file_processing_query = get_file_processing_collection(mongo_client=mongo_client)
-    http_data_query = get_http_data_collection(mongo_client=mongo_client)
+def run_processing_log_files_of_all_directories(mongo_db):
+    file_processing_query = get_file_processing_collection(mongo_client=mongo_db)
+    http_data_query = get_http_data_collection(mongo_client=mongo_db)
     mac_log = get_logfile_list('/home/traffic/unctrl')
     # mac_http_dict = dict()
 

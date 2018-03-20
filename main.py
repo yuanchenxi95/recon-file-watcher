@@ -10,7 +10,7 @@ import requests
 from pcap_process import process_pcap
 from http_log_watcher import log_watcher
 
-REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
+# REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
 
 MONGO_DB_ADDRESS = 'MONGO_DB_ADDRESS'
 
@@ -45,30 +45,41 @@ def process_latest_pcap(ctl_name):
     return mac_log_dict
 
 
-def run_processing_today_pcap():
-    mac_log = process_latest_pcap('/home/traffic/unctrl')
-
-    for dir_name, filename in mac_log.items():
-        k = dir_name + '/' + filename
-        mac_http_dict = dict()
-        mac_http_dict["data"] = process_pcap(k)
-        if len(mac_http_dict["data"]) == 0:
-            continue
-        mac_http_dict["id"] = dir_name[21:]
-        r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
+# def run_processing_today_pcap():
+#     mac_log = process_latest_pcap('/home/traffic/unctrl')
+#
+#     for dir_name, filename in mac_log.items():
+#         k = dir_name + '/' + filename
+#         mac_http_dict = dict()
+#         mac_http_dict["data"] = process_pcap(k)
+#         if len(mac_http_dict["data"]) == 0:
+#             continue
+#         mac_http_dict["id"] = dir_name[21:]
+#         r = requests.post("http://54.193.126.147:3000/api/networkData/todayData", json=mac_http_dict)
         # print(r.content)
 
 def get_mongo_client():
     from pymongo import MongoClient
     client = MongoClient(os.environ[MONGO_DB_ADDRESS], serverSelectionTimeoutMS=1)
+    return client
+
+
+def get_mongo_db(client):
     return client['test-moniotr']
 
+# def check_server_is_on():
+#     try:
+#         requests.get(REMOTE_HOST)
+#         return True
+#     except requests.exceptions.ConnectionError:
+#         return False
 
-def check_server_is_on():
+
+def check_mongodb_info(mongo_client):
     try:
-        requests.get('http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000')
+        mongo_client.server_info()
         return True
-    except requests.exceptions.ConnectionError:
+    except:
         return False
 
 
@@ -82,8 +93,9 @@ if __name__ == '__main__':
         load_env()
         logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
         mongo_client = get_mongo_client()
-        if check_server_is_on():
-            log_watcher.run_processing_log_files_of_all_directories(mongo_client=mongo_client)
+        mongo_db = get_mongo_db(mongo_client)
+        if check_mongodb_info(mongo_client):
+            log_watcher.run_processing_log_files_of_all_directories(mongo_db=mongo_db)
         else:
             logging.info("Server is down")
         s.enter(3, 1, main_loop, ())
