@@ -81,7 +81,6 @@ def get_http_data_collection(mongo_client):
          ('host', TEXT),
          ('http_method', TEXT),
          ('time_stamp', TEXT)],
-        name='compound_index',
         unique=True)
     return http_data_collection
 
