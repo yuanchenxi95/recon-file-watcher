@@ -86,12 +86,12 @@ def check_mongodb_info(mongo_client):
 if __name__ == '__main__':
     import sched, time
     s = sched.scheduler(time.time, time.sleep)
+    logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
+    load_env()
+    logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
 
     def main_loop():
-        print(str(datetime.datetime.now()))
-        logfile_name = './log/' + str(datetime.datetime.now()) + '.log'
-        load_env()
-        logging.basicConfig(filename=logfile_name, level=logging.DEBUG)
+        logging.info(str(datetime.datetime.now()))
         mongo_client = get_mongo_client()
         mongo_db = get_mongo_db(mongo_client)
         if check_mongodb_info(mongo_client):
@@ -101,7 +101,6 @@ if __name__ == '__main__':
         s.enter(3, 1, main_loop, ())
     s.enter(3, 1, main_loop, ())
     s.run()
-
 
 
 # if __name__ == '__main__':
