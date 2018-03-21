@@ -8,7 +8,6 @@ if __name__ == '__main__':
         content = f.readlines()
     content = [x.strip() for x in content]
     deviceList = []
-    print(content)
     for row in content:
         dataRow = row.split()
         deviceList.append({
