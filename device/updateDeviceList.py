@@ -14,6 +14,6 @@ if __name__ == '__main__':
             'alias': row[1]
         })
     print(deviceList)
-    r = requests.post(HOST_URL + 'api/device/updateDeviceList', data=deviceList)
+    r = requests.post(HOST_URL + 'api/device/updateDeviceList', json=deviceList)
     print(r.content)
 
