@@ -1,2 +1,5 @@
 if __name__ == '__main__':
-    print("hello")
+    fname = '/home/traffic/devices.txt'
+    with open(fname) as f:
+        content = f.readlines()
+        print(content)
