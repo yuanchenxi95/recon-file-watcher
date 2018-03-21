@@ -10,9 +10,10 @@ if __name__ == '__main__':
     deviceList = []
     print(content)
     for row in content:
+        dataRow = row.split()
         deviceList.append({
-            'mac_address': row[0],
-            'alias': row[1]
+            'mac_address': dataRow[0],
+            'alias': dataRow[1]
         })
     print(deviceList)
     r = requests.post(HOST_URL + 'api/device/updateDeviceList', json=deviceList)
