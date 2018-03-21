@@ -54,6 +54,7 @@ def get_file_last_modified_time(file_path):
 def write_http_log_data(http_data_query, http_log_list, mac_address):
     for h in http_log_list:
         h['mac_address'] = mac_address
+        h['time_stamp'] = float(h['time_stamp'])
     http_data_query.insert_many(http_log_list)
 
 
