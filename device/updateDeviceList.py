@@ -8,6 +8,7 @@ if __name__ == '__main__':
         content = f.readlines()
     content = [x.strip() for x in content]
     deviceList = []
+    print(content)
     for row in content:
         deviceList.append({
             'mac_address': row[0],
