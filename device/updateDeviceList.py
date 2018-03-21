@@ -13,6 +13,7 @@ if __name__ == '__main__':
             'mac_address': row[0],
             'alias': row[1]
         })
+    print(deviceList)
     r = requests.post(HOST_URL + 'api/device/updateDeviceList', data=deviceList)
-    print(r)
+    print(r.content)
 
