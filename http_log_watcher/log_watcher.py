@@ -30,9 +30,9 @@ def get_logfile_list(ctl_name):
     return mac_log_dict
 
 
-def get_log_file_uri(mac_address, date_string, request_type):
-    api_uri = REMOTE_HOST + '/api/networkData/logFileData/'
-    return api_uri + mac_address + '/' + date_string + '/' + request_type
+# def get_log_file_uri(mac_address, date_string, request_type):
+#     api_uri = REMOTE_HOST + '/api/networkData/logFileData/'
+#     return api_uri + mac_address + '/' + date_string + '/' + request_type
 
 
 def get_last_time_processed_line(file_log):
@@ -51,7 +51,9 @@ def get_file_last_modified_time(file_path):
     return os.path.getmtime(file_path)
 
 
-def write_http_log_data(http_data_query, http_log_list):
+def write_http_log_data(http_data_query, http_log_list, mac_address):
+    for h in http_log_list:
+        h['mac_address'] = mac_address
     http_data_query.insert_many(http_log_list)
 
 
@@ -118,7 +120,7 @@ def run_processing_log_files_of_all_directories(mongo_db):
                     continue
                 # http_data_dict[date_string] = http_log_list
                 # requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
-                write_http_log_data(http_data_query, http_log_list)
+                write_http_log_data(http_data_query, http_log_list, mac_address)
             else:
                 # logging.info("skip the file")
                 continue
