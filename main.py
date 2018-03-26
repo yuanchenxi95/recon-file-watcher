@@ -99,7 +99,7 @@ if __name__ == '__main__':
         else:
             logging.info("Server is down")
         s.enter(2, 1, main_loop, ())
-    s.enter(2、, 1, main_loop, ())
+    s.enter(2, 1, main_loop, ())
     s.run()
 
 
