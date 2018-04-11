@@ -121,6 +121,7 @@ def run_processing_log_files_of_all_directories(mongo_db):
                     continue
                 # http_data_dict[date_string] = http_log_list
                 # requests.post(get_log_file_uri(mac_address, date_string, request_type), json=http_log_list)
+                print(http_log_list)
                 write_http_log_data(http_data_query, http_log_list, mac_address)
             else:
                 # logging.info("skip the file")
