@@ -7,7 +7,7 @@ import urllib
 
 import requests
 
-from pcap_process import process_pcap
+# from pcap_process import process_pcap
 from http_log_watcher import log_watcher
 
 # REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
