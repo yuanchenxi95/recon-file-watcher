@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 # REMOTE_HOST = 'http://ec2-54-193-126-147.us-west-1.compute.amazonaws.com:3000'
-FEBRUARY_DATE_TIME = datetime(2018, 3, 1)
+FEBRUARY_DATE_TIME = datetime(2018, 10, 1)
 
 FILE_PATH = 'file_path'
 LINE_NUMBER_PROCESSED = 'line_number_processed'
